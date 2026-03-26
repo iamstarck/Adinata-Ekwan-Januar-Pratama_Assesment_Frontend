@@ -1,4 +1,3 @@
-import { tokenStorageVariable } from "@/hooks/useAuth";
 import axios from "axios";
 
 const SERVER_URL = "https://dev.patriotmed.id";
@@ -9,7 +8,7 @@ export const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem(tokenStorageVariable);
+    const token = localStorage.getItem("token");
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;

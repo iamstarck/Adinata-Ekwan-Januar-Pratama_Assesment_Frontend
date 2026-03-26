@@ -1,7 +1,5 @@
-export const tokenStorageVariable = "token";
-
 export const useAuth = () => {
-  const token = localStorage.getItem(tokenStorageVariable);
+  const token = localStorage.getItem("token");
 
   return {
     isAuthenticated: !!token,
