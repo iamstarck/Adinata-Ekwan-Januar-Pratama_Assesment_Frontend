@@ -1,0 +1,10 @@
+name: CI/CD Production
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci-base.yml
