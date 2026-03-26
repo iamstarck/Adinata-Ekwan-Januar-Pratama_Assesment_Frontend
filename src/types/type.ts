@@ -18,3 +18,18 @@ export type LoginResponse = {
     ];
   };
 };
+
+export type GetAllDataResponse = {
+  responseResult: boolean;
+  message: string;
+  data: {
+    id_banner_ads_package: string;
+    package_name: string;
+    package_description: string;
+    package_price: number;
+    package_duration: number;
+    created_at: string;
+    package_is_active: number;
+    from_admin: boolean;
+  }[];
+};
