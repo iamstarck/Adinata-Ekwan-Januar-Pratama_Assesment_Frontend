@@ -23,6 +23,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useAuth } from "@/hooks/useAuth";
+import { exportToExcel, exportToPDF } from "@/lib/exportUtils";
 import type { GetAllDataResponse } from "@/types/type";
 import {
   FileSpreadsheetIcon,
@@ -35,6 +36,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
@@ -67,6 +69,20 @@ const DashboardPage = () => {
   const handleDelete = async (id: string) => {
     await deleteDataService(id);
     window.location.reload();
+  };
+
+  const handleExportPDF = () => {
+    if (data.length === 0) return toast.error("Tidak ada data untuk diekspor");
+
+    exportToPDF(data);
+    toast.success("PDF berhasil dibuat");
+  };
+
+  const handleExportExcel = () => {
+    if (data.length === 0) return toast.error("Tidak ada data untuk diekspor");
+
+    exportToExcel(data);
+    toast.success("Excel berhasil dibuat");
   };
 
   return (
@@ -103,10 +119,18 @@ const DashboardPage = () => {
           </div>
 
           <div className="space-x-1">
-            <Button variant={"secondary"} className="hover:cursor-pointer">
+            <Button
+              variant={"secondary"}
+              onClick={() => handleExportPDF()}
+              className="hover:cursor-pointer"
+            >
               <FileTextIcon /> Export PDF
             </Button>
-            <Button variant={"secondary"} className="hover:cursor-pointer">
+            <Button
+              variant={"secondary"}
+              onClick={() => handleExportExcel()}
+              className="hover:cursor-pointer"
+            >
               <FileSpreadsheetIcon /> Export Excel
             </Button>
             <Button asChild>
@@ -148,7 +172,7 @@ const DashboardPage = () => {
               <TableRow className="uppercase tracking-tight">
                 <TableHead>ID</TableHead>
                 <TableHead>Package Name</TableHead>
-                <TableHead>Description</TableHead>
+                <TableHead className="max-w-100">Description</TableHead>
                 <TableHead className="text-right">Price</TableHead>
                 <TableHead className="text-right">Duration</TableHead>
                 <TableHead>Created At</TableHead>
@@ -159,12 +183,19 @@ const DashboardPage = () => {
             </TableHeader>
             <TableBody>
               {data.map((item) => (
-                <TableRow key={item.id_banner_ads_package}>
+                <TableRow
+                  key={item.id_banner_ads_package}
+                  className="odd:bg-primary/15"
+                >
                   <TableCell className="font-medium">
                     {item.id_banner_ads_package}
                   </TableCell>
-                  <TableCell>{item.package_name}</TableCell>
-                  <TableCell>{item.package_description}</TableCell>
+                  <TableCell className="font-semibold">
+                    {item.package_name}
+                  </TableCell>
+                  <TableCell className="max-w-100 whitespace-normal wrap-break-word">
+                    {item.package_description}
+                  </TableCell>
                   <TableCell className="text-right font-semibold">
                     ${item.package_price}
                   </TableCell>
@@ -219,11 +250,14 @@ const DashboardPage = () => {
                         </AlertDialogHeader>
 
                         <AlertDialogFooter>
-                          <AlertDialogCancel>Batal</AlertDialogCancel>
+                          <AlertDialogCancel className="hover:cursor-pointer">
+                            Batal
+                          </AlertDialogCancel>
                           <AlertDialogAction
                             onClick={() =>
                               handleDelete(item.id_banner_ads_package)
                             }
+                            className="hover:cursor-pointer"
                           >
                             Hapus
                           </AlertDialogAction>
