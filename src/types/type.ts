@@ -34,7 +34,7 @@ export type GetAllDataResponse = {
   }[];
 };
 
-export type CreateDataResponse = {
+export type DataUniversalResponse = {
   responseResult: boolean;
   message: string;
   data: object;

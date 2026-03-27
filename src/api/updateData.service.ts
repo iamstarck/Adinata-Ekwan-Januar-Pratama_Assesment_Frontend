@@ -1,5 +1,5 @@
 import { axiosInstance } from "@/lib/axios";
-import type { CreateDataResponse } from "@/types/type";
+import type { DataUniversalResponse } from "@/types/type";
 
 const updateDataEndpoint = "/BannerAds/Package/Update";
 
@@ -15,7 +15,7 @@ export const updateDataService = async (
   payload: updateDataPayload,
 ) => {
   try {
-    const response = await axiosInstance.put<CreateDataResponse>(
+    const response = await axiosInstance.put<DataUniversalResponse>(
       `${updateDataEndpoint}/${id}`,
       payload,
     );

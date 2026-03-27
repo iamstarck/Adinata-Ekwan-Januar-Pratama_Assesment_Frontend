@@ -51,8 +51,8 @@ const InsertDataPage = () => {
 
       <main className="flex flex-col items-center p-4 space-y-4">
         <PackageForm
-          title="Add New Package"
-          description="Create a new banner ads package"
+          title="Tambah Paket Baru"
+          description="Buat paket iklan banner baru"
           onSubmit={handleCreateData}
         />
       </main>

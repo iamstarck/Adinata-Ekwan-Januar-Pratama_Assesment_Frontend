@@ -61,8 +61,8 @@ const EditDataPage = () => {
 
       <main className="flex flex-col items-center p-4 space-y-4">
         <PackageForm
-          title="Edit Package"
-          description="Update banner ads package details"
+          title="Edit Paket"
+          description="Perbarui detail paket iklan banner"
           onSubmit={handleUpdateData}
           initialData={initialData}
         />

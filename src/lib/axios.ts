@@ -4,6 +4,7 @@ const SERVER_URL = "https://dev.patriotmed.id";
 
 export const axiosInstance = axios.create({
   baseURL: SERVER_URL,
+  timeout: 10000,
 });
 
 axiosInstance.interceptors.request.use(

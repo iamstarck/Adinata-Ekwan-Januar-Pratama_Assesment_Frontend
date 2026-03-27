@@ -1,4 +1,16 @@
+import { deleteDataService } from "@/api/deleteData.service";
 import { getAllDataService } from "@/api/getAllData.service";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -38,7 +50,7 @@ const DashboardPage = () => {
         setData(result);
       } catch (error) {
         console.error(error);
-        setError("Failed to fetch data");
+        setError("Gagal mendapatkan data");
       } finally {
         setLoading(false);
       }
@@ -52,6 +64,11 @@ const DashboardPage = () => {
     navigate("/login", { replace: true });
   };
 
+  const handleDelete = async (id: string) => {
+    await deleteDataService(id);
+    window.location.reload();
+  };
+
   return (
     <div className="space-y-2">
       <header className="p-4 border-b bg-accent">
@@ -62,7 +79,7 @@ const DashboardPage = () => {
             </div>
             <div>
               <h1 className="text-xl font-bold">Banner Ads Manager</h1>
-              <p className="text-muted-foreground">{user.username}</p>
+              <p className="text-muted-foreground">{user?.username}</p>
             </div>
           </div>
 
@@ -82,7 +99,7 @@ const DashboardPage = () => {
         <div className="flex justify-between items-center">
           <div>
             <h2 className="text-2xl font-bold">Banner Ads Packages</h2>
-            <p>Manage your advertising packages</p>
+            <p>Kelola paket iklanmu</p>
           </div>
 
           <div className="space-x-1">
@@ -108,18 +125,18 @@ const DashboardPage = () => {
 
         {error && <p className="text-destructive">{error}</p>}
 
-        {data.length === 0 && !loading && (
+        {data.length === 0 && !loading && !error && (
           <div className="flex flex-col items-center gap-4 text-center p-16">
             <PackageIcon size={72} className="stroke-muted-foreground" />
             <div className="space-y-1">
-              <p className="font-semibold text-lg">No package yet</p>
+              <p className="font-semibold text-lg">Belum ada paket</p>
               <p className="text-muted-foreground">
-                Get started by creating your first banner ads package.
+                Mulailah dengan membuat paket iklan banner pertamamu.
               </p>
             </div>
             <Button size={"lg"} asChild>
               <Link to={"/dashboard/new"}>
-                <PlusIcon /> Add Your First Package
+                <PlusIcon /> Tambahkan Paket Pertamamu
               </Link>
             </Button>
           </div>
@@ -179,13 +196,40 @@ const DashboardPage = () => {
                         <PencilIcon />
                       </Link>
                     </Button>
-                    <Button
-                      size={"icon-sm"}
-                      variant={"destructive"}
-                      className="hover:cursor-pointer"
-                    >
-                      <Trash2Icon />
-                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          size={"icon-sm"}
+                          variant={"destructive"}
+                          className="hover:cursor-pointer"
+                        >
+                          <Trash2Icon />
+                        </Button>
+                      </AlertDialogTrigger>
+
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Ingin menghapus paket ${item.package_name}?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Tindakan ini tidak dapat dibatalkan. Ini akan
+                            menghapus data secara permanen dari server kami.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Batal</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() =>
+                              handleDelete(item.id_banner_ads_package)
+                            }
+                          >
+                            Hapus
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </TableCell>
                 </TableRow>
               ))}
