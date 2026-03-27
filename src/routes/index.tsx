@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import DashboardPage from "@/pages/DashboardPage";
 import LoginPage from "@/pages/LoginPage";
+import InsertDataPage from "@/pages/InsertDataPage";
 
 const AppRoutes = () => {
   const { isAuthenticated } = useAuth();
@@ -39,6 +40,17 @@ const AppRoutes = () => {
         path="/dashboard"
         element={
           isAuthenticated ? <DashboardPage /> : <Navigate to="/login" replace />
+        }
+      />
+
+      <Route
+        path="/dashboard/new"
+        element={
+          isAuthenticated ? (
+            <InsertDataPage />
+          ) : (
+            <Navigate to="/login" replace />
+          )
         }
       />
     </Routes>

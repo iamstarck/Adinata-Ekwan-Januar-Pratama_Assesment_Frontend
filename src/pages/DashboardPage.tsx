@@ -1,4 +1,4 @@
-import { getAllDataService } from "@/api/auth/getAllData.service";
+import { getAllDataService } from "@/api/getAllData.service";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -22,7 +22,7 @@ import {
   Trash2Icon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
@@ -93,8 +93,10 @@ const DashboardPage = () => {
             <Button variant={"secondary"} className="hover:cursor-pointer">
               <FileSpreadsheetIcon /> Export Excel
             </Button>
-            <Button>
-              <PlusIcon /> Add Package
+            <Button asChild>
+              <Link to={"/dashboard/new"}>
+                <PlusIcon /> Add Package
+              </Link>
             </Button>
           </div>
         </div>
@@ -116,8 +118,10 @@ const DashboardPage = () => {
                 Get started by creating your first banner ads package.
               </p>
             </div>
-            <Button size={"lg"}>
-              <PlusIcon /> Add Your First Package
+            <Button size={"lg"} asChild>
+              <Link to={"/dashboard/new"}>
+                <PlusIcon /> Add Your First Package
+              </Link>
             </Button>
           </div>
         )}
@@ -146,7 +150,7 @@ const DashboardPage = () => {
                   <TableCell>{item.package_name}</TableCell>
                   <TableCell>{item.package_description}</TableCell>
                   <TableCell className="text-right font-semibold">
-                    {item.package_price}
+                    ${item.package_price}
                   </TableCell>
                   <TableCell>
                     {item.package_duration}{" "}

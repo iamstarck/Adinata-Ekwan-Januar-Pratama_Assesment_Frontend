@@ -33,3 +33,9 @@ export type GetAllDataResponse = {
     from_admin: boolean;
   }[];
 };
+
+export type CreateDataResponse = {
+  responseResult: boolean;
+  message: string;
+  data: object;
+};
