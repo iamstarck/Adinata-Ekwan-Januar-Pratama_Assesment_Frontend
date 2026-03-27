@@ -3,6 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import DashboardPage from "@/pages/DashboardPage";
 import LoginPage from "@/pages/LoginPage";
 import InsertDataPage from "@/pages/InsertDataPage";
+import EditDataPage from "@/pages/EditDataPage";
 
 const AppRoutes = () => {
   const { isAuthenticated } = useAuth();
@@ -51,6 +52,13 @@ const AppRoutes = () => {
           ) : (
             <Navigate to="/login" replace />
           )
+        }
+      />
+
+      <Route
+        path="/dashboard/edit/:id"
+        element={
+          isAuthenticated ? <EditDataPage /> : <Navigate to="/login" replace />
         }
       />
     </Routes>

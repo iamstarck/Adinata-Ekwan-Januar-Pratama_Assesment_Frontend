@@ -1,18 +1,28 @@
-import { createDataService } from "@/api/createData.service";
+import { updateDataService } from "@/api/updateData.service";
 import { Button } from "@/components/ui/button";
 import PackageForm from "@/features/insert-data/components/PackageForm";
 import type { InsertDataFormValues } from "@/features/insert-data/validation/insert-data-validation";
 import axios from "axios";
 import { ArrowLeftIcon } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
-const InsertDataPage = () => {
+const EditDataPage = () => {
+  const location = useLocation();
+  const { id } = useParams();
   const navigate = useNavigate();
 
-  const handleCreateData = async (payload: InsertDataFormValues) => {
+  const initialData = location.state.data;
+
+  const handleUpdateData = async (payload: InsertDataFormValues) => {
+    if (!id) {
+      toast.error("Invalid ID");
+
+      return;
+    }
+
     try {
-      const response = await createDataService(payload);
+      const response = await updateDataService(id, payload);
 
       if (!response.responseResult) {
         toast.error(response.message);
@@ -51,13 +61,14 @@ const InsertDataPage = () => {
 
       <main className="flex flex-col items-center p-4 space-y-4">
         <PackageForm
-          title="Add New Package"
-          description="Create a new banner ads package"
-          onSubmit={handleCreateData}
+          title="Edit Package"
+          description="Update banner ads package details"
+          onSubmit={handleUpdateData}
+          initialData={initialData}
         />
       </main>
     </div>
   );
 };
 
-export default InsertDataPage;
+export default EditDataPage;

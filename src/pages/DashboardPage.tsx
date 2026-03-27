@@ -50,7 +50,6 @@ const DashboardPage = () => {
   const handleLogout = () => {
     localStorage.removeItem("auth");
     navigate("/login", { replace: true });
-    window.location.reload();
   };
 
   return (
@@ -134,11 +133,11 @@ const DashboardPage = () => {
                 <TableHead>Package Name</TableHead>
                 <TableHead>Description</TableHead>
                 <TableHead className="text-right">Price</TableHead>
-                <TableHead>Duration</TableHead>
+                <TableHead className="text-right">Duration</TableHead>
                 <TableHead>Created At</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>From Admin</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead className="text-center">Status</TableHead>
+                <TableHead className="text-center">From Admin</TableHead>
+                <TableHead className="text-center">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -152,27 +151,36 @@ const DashboardPage = () => {
                   <TableCell className="text-right font-semibold">
                     ${item.package_price}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="text-right">
                     {item.package_duration}{" "}
                     {item.package_duration > 1 ? "days" : "day"}
                   </TableCell>
                   <TableCell>{item.created_at}</TableCell>
-                  <TableCell>
+                  <TableCell className="text-center">
                     <Badge variant={"secondary"}>
                       {item.package_is_active ? "Active" : "Inactive"}
                     </Badge>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="text-center">
                     <Badge variant={"secondary"}>
                       {item.from_admin ? "Yes" : "No"}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-right space-x-2">
-                    <Button size={"icon-xs"} className="hover:cursor-pointer">
-                      <PencilIcon />
+                  <TableCell className="text-center space-x-1">
+                    <Button
+                      size={"icon-sm"}
+                      className="hover:cursor-pointer"
+                      asChild
+                    >
+                      <Link
+                        to={`/dashboard/edit/${item.id_banner_ads_package}`}
+                        state={{ data: item }}
+                      >
+                        <PencilIcon />
+                      </Link>
                     </Button>
                     <Button
-                      size={"icon-xs"}
+                      size={"icon-sm"}
                       variant={"destructive"}
                       className="hover:cursor-pointer"
                     >
