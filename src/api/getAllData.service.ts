@@ -1,5 +1,5 @@
 import { axiosInstance } from "@/lib/axios";
-import { formatLocalDate } from "@/lib/date";
+import { formatLocalDate } from "@/utils/date";
 import type { GetAllDataResponse } from "@/types/type";
 
 const getAllDataEndpoint = "/BannerAds/Package/List";
