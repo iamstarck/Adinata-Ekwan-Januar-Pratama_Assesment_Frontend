@@ -45,7 +45,7 @@ const LoginPage = () => {
         return;
       }
 
-      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("auth", JSON.stringify(response.data));
 
       toast.success(response.message);
       navigate("/dashboard");

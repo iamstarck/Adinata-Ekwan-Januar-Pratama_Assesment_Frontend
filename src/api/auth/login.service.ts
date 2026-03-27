@@ -17,7 +17,7 @@ export const loginService = async (payload: LoginPayload) => {
 
     return response.data;
   } catch (error) {
-    console.error("FETCH ERROR:", error);
+    console.error("LOGIN ERROR:", error);
 
     throw error;
   }
