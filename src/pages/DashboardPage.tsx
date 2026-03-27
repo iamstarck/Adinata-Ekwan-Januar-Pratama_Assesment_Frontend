@@ -1,10 +1,6 @@
-import { deleteDataService } from "@/api/deleteData.service";
-import { getAllDataService } from "@/api/getAllData.service";
 import { Spinner } from "@/components/ui/spinner";
 import { useAuth } from "@/hooks/useAuth";
 import { exportToExcel, exportToPDF } from "@/utils/exportUtils";
-import type { GetAllDataResponse } from "@/types/type";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { usePagination } from "@/utils/usePagination";
@@ -13,32 +9,14 @@ import DashboardActions from "@/features/dashboard/components/DashboardActions";
 import EmptyState from "@/features/dashboard/components/EmptyState";
 import DataTable from "@/features/dashboard/components/DataTable";
 import DashboardPagination from "@/features/dashboard/components/DashboardPagination";
+import { usePackages } from "@/hooks/usePackages";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
-  const [data, setData] = useState<GetAllDataResponse["data"]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { packagesQuery, deleteMutation } = usePackages();
+  const { data = [], isLoading, isError, error, refetch } = packagesQuery;
+
   const { user } = useAuth()!;
-
-  const fetchData = async () => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const result = await getAllDataService();
-      setData(result);
-    } catch (error) {
-      console.error(error);
-      setError("Gagal mendapatkan data");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const { page, setPage, totalPages, paginatedData } = usePagination(data, 10);
 
@@ -49,15 +27,17 @@ const DashboardPage = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      const promise = deleteDataService(id);
+      const promise = deleteMutation.mutateAsync(id);
+
       toast.promise(promise, {
         loading: "Menghapus paket...",
         success: () => {
-          fetchData();
+          refetch();
 
           return "Paket berhasil dihapus";
         },
-        error: "Gagal menghapus paket",
+
+        error: (err) => err.response.data.message || "Gagal menghapus paket",
       });
 
       await promise;
@@ -90,17 +70,24 @@ const DashboardPage = () => {
           onExportExcel={handleExportExcel}
         />
 
-        {loading && (
+        {isLoading && (
           <div className="flex flex-col items-center justify-center">
             <Spinner className="size-6" />
           </div>
         )}
 
-        {error && <p className="text-destructive">{error}</p>}
+        {isError && (
+          <div className="text-center p-10">
+            <p className="text-destructive">{error.message}</p>
+            <button onClick={() => refetch()} className="text-sm underline">
+              Coba Lagi
+            </button>
+          </div>
+        )}
 
-        {!loading && data.length === 0 && !error && <EmptyState />}
+        {!isLoading && data.length === 0 && !isError && <EmptyState />}
 
-        {paginatedData.length > 0 && !loading && (
+        {paginatedData.length > 0 && !isLoading && (
           <>
             <DataTable data={paginatedData} onDelete={handleDelete} />
             <DashboardPagination

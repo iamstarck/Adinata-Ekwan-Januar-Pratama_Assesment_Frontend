@@ -1,34 +1,30 @@
-import { createDataService } from "@/api/createData.service";
 import { Button } from "@/components/ui/button";
 import PackageForm from "@/features/insert-data/components/PackageForm";
 import type { InsertDataFormValues } from "@/features/insert-data/validation/insert-data-validation";
-import axios from "axios";
+import { usePackages } from "@/hooks/usePackages";
 import { ArrowLeftIcon } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const InsertDataPage = () => {
   const navigate = useNavigate();
+  const { createMutation } = usePackages();
 
   const handleCreateData = async (payload: InsertDataFormValues) => {
-    try {
-      const response = await createDataService(payload);
+    const promise = createMutation.mutateAsync;
 
-      if (!response.responseResult) {
-        toast.error(response.message);
+    toast.promise(promise(payload), {
+      loading: "Sedang memproses...",
+      success: (data) => {
+        navigate("/dashboard");
 
-        return;
-      }
+        return data.message;
+      },
 
-      toast.success(response.message);
-      navigate("/dashboard");
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        toast.error(error.message);
-      } else {
-        toast.error("Unexpected error");
-      }
-    }
+      error: (err) => {
+        return err.response.data.message || "Gagal membuat paket";
+      },
+    });
   };
 
   return (
@@ -54,6 +50,7 @@ const InsertDataPage = () => {
           title="Tambah Paket Baru"
           description="Buat paket iklan banner baru"
           onSubmit={handleCreateData}
+          isLoading={createMutation.isPending}
         />
       </main>
     </div>

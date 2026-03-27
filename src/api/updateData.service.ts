@@ -3,7 +3,7 @@ import type { DataUniversalResponse } from "@/types/type";
 
 const updateDataEndpoint = "/BannerAds/Package/Update";
 
-type updateDataPayload = {
+export type updateDataPayload = {
   package_name: string;
   package_description: string;
   package_price: number;

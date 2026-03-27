@@ -160,7 +160,7 @@ const PackageForm = ({
         </CardContent>
         <CardFooter className="grid grid-cols-2 gap-4">
           <Button variant={"outline"} asChild>
-            <Link to={"/dashboard"}>Cancel</Link>
+            <Link to={"/dashboard"}>Batal</Link>
           </Button>
 
           <Button
@@ -168,7 +168,7 @@ const PackageForm = ({
             disabled={isLoading}
             className="hover:cursor-pointer"
           >
-            <SaveIcon /> {isLoading ? "Saving..." : "Save Package"}
+            <SaveIcon /> {isLoading ? "Menyimpan..." : "Simpan Paket"}
           </Button>
         </CardFooter>
       </Card>
